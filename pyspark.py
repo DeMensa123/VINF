@@ -17,14 +17,14 @@ from os import listdir
 import os 
 from os.path import isfile, join
 
-import whoosh_search as search
+# import whoosh_search as search
 
 # to run the file use this commmand:
 # spark-submit pyspark.py <master> <input_file> <number_of_partitions> <ouput_directory>
 # master - master URL for the cluster
 # input_file - freebase input file
 # number_of_partitions - number of partitions (output files)
-# name of output directory
+# ouput_directory - name of output directory
 
 def rename_dir(readPath):
     writePath = readPath + '_csv'
