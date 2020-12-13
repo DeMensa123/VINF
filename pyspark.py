@@ -27,20 +27,6 @@ from os.path import isfile, join
 # master - master URL for the cluster
 # spark_executor_uri - only if you want to run spark on cluster
 
-def rename_dir(readPath):
-    writePath = readPath + '_csv'
-    os.mkdir(writePath)
-
-    file_list = [f for f in listdir(readPath)]
-
-    for i in file_list:
-        filename, file_extension = os.path.splitext(i)
-        reg = '(\.[\w]+-[\w]+)|([\w]+-[\w]+)'
-        result = re.match(reg, filename).group()
-        if file_extension == '.csv':
-            filename = filename.split('-')[1]
-            os.rename(readPath + '/' + i, writePath + "/" + result + file_extension)
-
 
 # regex for names, aliases and people
 re_name = '(\/[gm]\..+\t<http:\/\/rdf\.freebase\.com\/ns\/type\.object\.name>\t\".*\"@en)'
@@ -155,10 +141,7 @@ except Exception as e:
 # split data into n partitions and execute computations on the partitions in parallel
 try:
     people.repartition(n).write.format('com.databricks.spark.csv') \
-        .option("mapreduce.fileoutputcommitter.marksuccessfuljobs","false").save(output_dir, header = 'true')
+        .option("mapreduce.fileoutputcommitter.marksuccessfuljobs","false").save(output_dir, header = 'false')
 except Exception as e:
     print(CRED + "Chyba pri vystupnych suboroch" + CEND)
     exit(e)
-
-# rename output files to more readable form
-rename_dir(output_dir) 
